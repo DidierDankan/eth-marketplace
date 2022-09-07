@@ -1,0 +1,13 @@
+//this file allow us to config absolute path and give then aliases
+// like
+{
+    "compilerOptions":{
+        "baseUrl": ".",
+        "paths": {
+            "@components/*": ["components/*"],
+            "@pages/*": ["pages/*"],
+            "@styles/*": ["styles/*"],
+            
+        }
+    }
+}
