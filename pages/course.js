@@ -1,7 +1,5 @@
-import Hero from '@components/course/Hero';
-import Keypoint from '@components/course/Keypoint';
-import Lecture from '@components/course/Lecture';
-import Modal from '@components/course/Modal';
+import { Lecture, Keypoint, Hero } from '@components/course';
+import { Modal } from '@components/common';
 
 export default function Course() {
 	return (
@@ -9,7 +7,6 @@ export default function Course() {
 			<Hero />
 			<Keypoint />
 			<Lecture />
-
 			<Modal />
 		</div>
 	);

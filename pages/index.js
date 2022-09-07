@@ -1,11 +1,7 @@
-import Address from '@components/home/Address';
-import Breadcrumbs from '@components/home/Breadcrumbs';
-import CourseCard from '@components/home/CourseCard';
-import Currency from '@components/home/Currency';
-import Hero from '@components/home/Hero';
-import Navbar from '@components/Navbar';
-import OrderInfo from '@components/home/OrderInfo';
-import Footer from '@components/Footer';
+import { OrderList } from '@components/order';
+import { CourseCard } from '@components/course';
+import { Footer, Navbar, Breadcrumbs, Hero } from '@components/common';
+import { Walletbar, EthRates } from '@components/web3';
 
 export default function Home() {
 	return (
@@ -16,9 +12,9 @@ export default function Home() {
 					<div className="fit">
 						<Hero />
 						<Breadcrumbs />
-						<Address />
-						<Currency />
-						<OrderInfo />
+						<Walletbar />
+						<EthRates />
+						<OrderList />
 						<section className="grid grid-cols-2 gap-4 mb-5">
 							{Array.from({ length: 4 }).map((_, i) => (
 								<CourseCard key={i + 'a'} />

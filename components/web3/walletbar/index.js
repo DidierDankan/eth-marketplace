@@ -1,4 +1,4 @@
-const Address = () => {
+const Walletbar = () => {
 	return (
 		<section className="text-white bg-indigo-600">
 			<div className="p-8">
@@ -31,4 +31,4 @@ const Address = () => {
 	);
 };
 
-export default Address;
+export default Walletbar;

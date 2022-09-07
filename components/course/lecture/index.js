@@ -1,4 +1,4 @@
-import lectures from '@components/helpers/lectures';
+import lectures from 'helpers/lectures';
 
 const Lecture = () => {
 	return (
