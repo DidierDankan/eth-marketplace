@@ -1,8 +1,6 @@
-import { OrderList } from '@components/order';
-import { CourseCard } from '@components/course';
-import { Breadcrumbs, Hero } from '@components/common';
-import { Walletbar, EthRates } from '@components/web3';
-import { BaseLayout } from '@components/layout';
+import { CourseCard } from '@components/ui/course';
+import { Hero } from '@components/ui/common';
+import { BaseLayout } from '@components/ui/layout';
 import { getAllCourser } from '@content/course/fetcher';
 
 export default function Home({ courses }) {
@@ -11,11 +9,6 @@ export default function Home({ courses }) {
 		<div className="overflow-hidden">
 			<>
 				<Hero />
-				{/* <Breadcrumbs />
-				<Walletbar />
-				<EthRates />
-				<OrderList /> */}
-
 				<section className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
 					{courses.map((c) => (
 						<CourseCard

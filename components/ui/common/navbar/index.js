@@ -32,9 +32,9 @@ const Navbar = () => {
 
 							<a
 								href="#"
-								className="font-medium mr-8 text-indigo-600 hover:text-indigo-500"
+								className="px-4 py-2 border text-base rounded-lg text-white bg-indigo-600 hover:bg-indigo-700"
 							>
-								Log in
+								Connect
 							</a>
 						</div>
 					</div>
