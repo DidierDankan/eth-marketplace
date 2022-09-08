@@ -1,6 +1,8 @@
 import lectures from 'helpers/lectures';
 
-const Lecture = () => {
+const Lecture = ({ lock }) => {
+	const statusClass =
+		'px-2 inline-flex text-xs leading-5 font-semibold rounded-full';
 	return (
 		<section className="max-w-5xl mx-auto">
 			<div className="flex flex-col">
@@ -40,8 +42,14 @@ const Lecture = () => {
 												</div>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap">
-												<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-													Unlocked
+												<span
+													className={
+														lock
+															? `bg-red-100 text-red-800 ${statusClass}`
+															: `bg-green-100 text-green-800 ${statusClass}`
+													}
+												>
+													{lock ? 'locked' : 'Unlocked'}
 												</span>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -49,7 +57,7 @@ const Lecture = () => {
 													href="#"
 													className="text-indigo-600 hover:text-indigo-900"
 												>
-													Play
+													{lock ? 'Get access' : 'Play'}
 												</a>
 											</td>
 										</tr>

@@ -1,10 +1,10 @@
 import { BaseLayout } from '@components/layout';
-import { Lecture, Keypoint, Hero } from '@components/course';
+import { Lecture, Hero, Keyinfo } from '@components/course';
 import { Modal } from '@components/common';
 import { getAllCourser } from '@content/course/fetcher';
 
 export default function Course({ course }) {
-	console.log(course.wsl);
+	console.log('points', course.wsl);
 	return (
 		<>
 			<div className="py-4">
@@ -14,8 +14,8 @@ export default function Course({ course }) {
 					cover={course.coverImage}
 				/>
 			</div>
-			<Keypoint points={course.wsl} />
-			<Lecture />
+			<Keyinfo points={course.wsl} />
+			<Lecture lock={true} />
 			<Modal />
 		</>
 	);
