@@ -11,6 +11,7 @@ export default function Web3Provider({ children }) {
 		web3: null,
 		contract: null,
 		isProviderLoaded: false,
+		hooks: setupHooks(),
 	});
 	//load web3 provider
 	useEffect(() => {
@@ -24,11 +25,13 @@ export default function Web3Provider({ children }) {
 					provider,
 					contract: null,
 					isProviderLoaded: true,
+					//use to call hooks that depend on web3, we pass web3 as argument
+					hooks: setupHooks(web3),
 				});
 			} else {
 				setWeb3Api((prev) => ({
 					...prev,
-					isProviderLoaded: true,
+					isProviderLoaded: false,
 				})),
 					console.error('Please, install Matamask');
 			}
@@ -43,8 +46,6 @@ export default function Web3Provider({ children }) {
 		return {
 			...web3Api,
 			isWeb3Loaded: web3,
-			//use to call hooks that depend on web3, we pass web3 as argument
-			getHooks: () => setupHooks(web3),
 			connect: provider
 				? async () => {
 						try {
@@ -72,9 +73,10 @@ export function useWeb3() {
 	return useContext(Web3Context);
 }
 
+//use to call hooks that depend on web3, we pass web3 as argument
 export function useHooks(cb) {
-	const { getHooks } = useWeb3();
-	return cb(getHooks());
+	const { hooks } = useWeb3();
+	return cb(hooks);
 }
 
 // ** cb = callback

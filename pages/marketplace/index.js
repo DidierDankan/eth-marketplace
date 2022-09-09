@@ -1,36 +1,32 @@
-import { CourseList } from '@components/ui/course';
+import { CourseCard, CourseList } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { getAllCourser } from '@content/course/fetcher';
 import { Walletbar } from '@components/ui/web3';
-import { useAccount } from '@components/web3/hooks/useAccount';
-import { useNetwork } from '@components/web3/hooks/useNetwork';
+import { useAccount, useNetwork } from '@components/web3/hooks';
 
 export default function Marketplace({ courses }) {
-	const { account, isAdmin } = useAccount();
+	const { account } = useAccount();
 	const { network } = useNetwork();
+
+	console.log('ACCOUNT', account);
 
 	return (
 		<>
 			<div className="py-4">
 				<Walletbar
 					address={account.data}
-					isAdmin={isAdmin}
-					networkName={network.data}
+					isAdmin={account.isAdmin}
+					network={{
+						isSupported: network.isSupported,
+						target: network.target,
+						networkName: network.data,
+						hasInitialResponse: network.hasInitialResponse,
+					}}
 				/>
 			</div>
-			<CourseList courses={courses} />
-			{/* <section className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
-				{courses.map((c) => (
-					<CourseCard
-						key={c.id}
-						type={c.type}
-						title={c.title}
-						description={c.description}
-						image={c.coverImage}
-						slug={c.slug}
-					/>
-				))}
-			</section> */}
+			<CourseList courses={courses}>
+				{(course) => <CourseCard key={course.id} course={course} />}
+			</CourseList>
 		</>
 	);
 }

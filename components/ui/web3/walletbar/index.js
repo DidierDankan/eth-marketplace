@@ -1,4 +1,4 @@
-const Walletbar = ({ address, isAdmin, networkName }) => {
+const Walletbar = ({ address, isAdmin, network }) => {
 	const adminColorAddress = () => {
 		if (isAdmin) {
 			return 'bg-green-500';
@@ -33,10 +33,20 @@ const Walletbar = ({ address, isAdmin, networkName }) => {
 						</div>
 					</div>
 					<div>
-						<div>
-							<span>Currently on </span>
-							<strong className="text-2xl">{networkName}</strong>
-						</div>
+						{network.hasInitialResponse && !network.isSupported && (
+							<div className="bg-red-400 p-4 rounded-lg">
+								<div>Connected to wrong Network</div>
+								<div>
+									Connect to: <strong>{network.target}</strong>
+								</div>
+							</div>
+						)}
+						{network.networkName && (
+							<div>
+								<span>Currently on </span>
+								<strong className="text-2xl">{network.networkName}</strong>
+							</div>
+						)}
 					</div>
 				</div>
 			</div>

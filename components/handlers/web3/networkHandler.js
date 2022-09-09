@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 import EnumNetworks from 'enum/chainNetworkName';
 import useSwr from 'swr';
 
-export const handler = (web3) => () => {
+const targetNetwork = EnumNetworks[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID];
+
+export const handler = (web3, provider) => () => {
 	const { data, mutate, ...swrRes } = useSwr(
 		() => {
 			return web3 ? 'web3/network' : null;
 		},
 		async () => {
-			//get current chain
+			//get current chainId
 			const netId = await web3.eth.getChainId();
 			return EnumNetworks[netId].name;
 		}
@@ -22,10 +24,10 @@ export const handler = (web3) => () => {
 	}, [mutate]);
 
 	return {
-		network: {
-			data: data,
-			mutate,
-			...swrRes,
-		},
+		data: data,
+		mutate,
+		target: targetNetwork.name,
+		isSupported: data === targetNetwork.name,
+		...swrRes,
 	};
 };

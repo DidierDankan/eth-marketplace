@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useWeb3 } from '@components/provider';
 import { Button } from '@components/ui/common';
-import { useAccount } from '@components/web3/hooks/useAccount';
 import { useRouter } from 'next/router';
+import { useAccount } from '@components/web3/hooks';
 
 const Navbar = () => {
 	const { connect, isProviderLoaded, isWeb3Loaded } = useWeb3();
-	const { account, isAdmin } = useAccount();
+	const { account } = useAccount();
 	const router = useRouter();
 
 	const hideAddress = () => {
@@ -65,7 +65,7 @@ const Navbar = () => {
 								) : (
 									!hideAddress() && (
 										<Button
-											variant={isAdmin ? 'green' : 'purple'}
+											variant={account.isAdmin ? 'green' : 'purple'}
 											className={'cursor-default'}
 										>
 											{`${

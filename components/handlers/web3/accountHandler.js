@@ -9,7 +9,7 @@ const adminAddresses = {
 	'0xD1d7d20147AD9cb7F60Fc85a3e3a3c8B28728699': true,
 };
 
-export const handler = (web3) => () => {
+export const handler = (web3, provider) => () => {
 	const { data, mutate, ...swrRes } = useSwr(
 		() => {
 			//if we dont have a identifier the callback function will not run, we have the identifier if we have web3
@@ -33,11 +33,9 @@ export const handler = (web3) => () => {
 	}, [mutate]);
 
 	return {
-		account: {
-			data: data,
-			mutate,
-			...swrRes,
-		},
+		data: data,
+		mutate,
+		...swrRes,
 		//web3 util to dehash keccak256: web3.utils.keccak256(hashed)
 		isAdmin: (data && adminAddresses[data]) ?? false,
 	};
