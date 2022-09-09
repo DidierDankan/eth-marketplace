@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import detectEthereumProvider from '@metamask/detect-provider'; //package to set ethereum provider
 import Web3 from 'web3';
-import { setupHooks } from '@components/ui/web3/hooks/setupHooks';
+import { setupHooks } from '@components/web3/hooks/setupHooks';
 
 const Web3Context = createContext(null);
 
@@ -48,6 +48,7 @@ export default function Web3Provider({ children }) {
 			connect: provider
 				? async () => {
 						try {
+							console.log('does it comes in here');
 							await provider.request({ method: 'eth_requestAccounts' });
 						} catch {
 							location.reload();

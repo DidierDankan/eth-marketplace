@@ -5,11 +5,10 @@ import { useAccount } from '@components/web3/hooks/useAccount';
 
 const Navbar = () => {
 	const { connect, isProviderLoaded, isWeb3Loaded } = useWeb3();
-	const { account } = useAccount();
+	const { account, isAdmin } = useAccount();
 
 	return (
 		<section>
-			{account}
 			<div className="relative pt-6 px-4 sm:px-6 lg:px-8">
 				<nav className="relative" aria-label="Global">
 					<div className="flex justify-between items-center">
@@ -37,11 +36,33 @@ const Navbar = () => {
 								</a>
 							</Link>
 							{!isProviderLoaded ? (
-								<Button disabled={true} onClick={() => connect()}>
+								<Button
+									variant={'purple'}
+									disabled={true}
+									onClick={() => connect()}
+								>
 									Loading...
 								</Button>
 							) : isWeb3Loaded ? (
-								<Button onClick={() => connect()}>Connect</Button>
+								!account.data ? (
+									<Button variant={'purple'} onClick={() => connect()}>
+										Connect
+									</Button>
+								) : (
+									<Button
+										variant={isAdmin ? 'green' : 'purple'}
+										className={'cursor-default'}
+									>
+										{`${
+											account.data.substr(0, 5) +
+											'...' +
+											account.data.substr(
+												account.data.length - 5,
+												account.data.length
+											)
+										}`}
+									</Button>
+								)
 							) : (
 								<a
 									target="_blank"
