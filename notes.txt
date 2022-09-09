@@ -1,0 +1,32 @@
+hooks abstract
+
+in components/hooks/web3 we have our handlers wich are the logic itself
+we then import thoses handler in setupHooks file
+setupHooks file contains all of our hooks ready to be called
+
+this is a property of the context useWeb3()
+getHooks: () => setupHooks(web3),
+
+so when we descontruct {getHooks} from useWeb3() in provider/web3, this is what will be returned
+export const setupHooks = (web3) => {
+	return {
+		useAccount: createUseAccount(web3),
+		useTest: createUseTest(web3),
+	};
+};
+
+in provider/web3 we have the context that contains this function 
+export function useHooks(cb) {
+	const { getHooks } = useWeb3();
+	return cb(getHooks());
+}
+
+so in our nav bar we call useAccount(), this is what will be returned, wich is the useHooks() from provider/web3
+export const useAccount = () => {
+    by calling this function twice we are calling useHooks() then straight away calling useAccount()
+	return useHooks((hooks) => hooks.useAccount)(); // () => {return {
+	//     account, isAdmin
+	//  }; this is what supposed to return when calling useAccount()
+};
+
+the same works for useTest()

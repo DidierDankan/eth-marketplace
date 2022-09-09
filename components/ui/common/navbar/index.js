@@ -2,10 +2,22 @@ import Link from 'next/link';
 import { useWeb3 } from '@components/provider';
 import { Button } from '@components/ui/common';
 import { useAccount } from '@components/web3/hooks/useAccount';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
 	const { connect, isProviderLoaded, isWeb3Loaded } = useWeb3();
 	const { account, isAdmin } = useAccount();
+	const router = useRouter();
+
+	const hideAddress = () => {
+		if (router.asPath.includes('/marketplace')) {
+			return true;
+		}
+
+		return false;
+	};
+
+	console.log('what does it returns', hideAddress());
 
 	return (
 		<section>
@@ -18,11 +30,13 @@ const Navbar = () => {
 									Home
 								</a>
 							</Link>
-							<Link href="/" passHref>
+
+							<Link href="/marketplace" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Marketplace
 								</a>
 							</Link>
+
 							<Link href="/" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Blogs
@@ -49,19 +63,21 @@ const Navbar = () => {
 										Connect
 									</Button>
 								) : (
-									<Button
-										variant={isAdmin ? 'green' : 'purple'}
-										className={'cursor-default'}
-									>
-										{`${
-											account.data.substr(0, 5) +
-											'...' +
-											account.data.substr(
-												account.data.length - 5,
-												account.data.length
-											)
-										}`}
-									</Button>
+									!hideAddress() && (
+										<Button
+											variant={isAdmin ? 'green' : 'purple'}
+											className={'cursor-default'}
+										>
+											{`${
+												account.data.substr(0, 5) +
+												'...' +
+												account.data.substr(
+													account.data.length - 5,
+													account.data.length
+												)
+											}`}
+										</Button>
+									)
 								)
 							) : (
 								<a

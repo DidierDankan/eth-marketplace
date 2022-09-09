@@ -15,15 +15,19 @@ export const handler = (web3) => () => {
 			//if we dont have a identifier the callback function will not run, we have the identifier if we have web3
 			return web3 ? 'web3/accounts' : null;
 		},
+		//callback function
 		async () => {
 			const accounts = await web3.eth.getAccounts();
 			return accounts[0];
 		}
 	); // will return swrRes.data, swrRes.error
 
+	//this handles the change of address of our portfolio
 	useEffect(() => {
 		window.ethereum &&
 			window.ethereum.on('accountsChanged', (account) => {
+				// Sometimes, you want to update a part of your data based on the current data.
+				// With mutate, you can pass an async function which will receive the current cached value, if any, and returns an updated document. The SWR object returned by useSWR also contains a mutate() function that is pre-bound to the SWR's key, it does not require the key parameter.
 				mutate(account[0] ?? null);
 			});
 	}, [mutate]);
@@ -34,7 +38,7 @@ export const handler = (web3) => () => {
 			mutate,
 			...swrRes,
 		},
-		//web3 util to dehash keccak256 web3.utils.keccak256(hashed)
+		//web3 util to dehash keccak256: web3.utils.keccak256(hashed)
 		isAdmin: (data && adminAddresses[data]) ?? false,
 	};
 };

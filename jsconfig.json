@@ -9,6 +9,7 @@
             "@styles/*": ["styles/*"],
             "@helpers/*": ["helpers/*"],
             "@content/*": ["content/*"],
+            "@img/*": ["img/*"],
         }
     }
 }

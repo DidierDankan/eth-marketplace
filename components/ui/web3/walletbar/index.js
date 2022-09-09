@@ -1,10 +1,15 @@
-const Walletbar = () => {
+const Walletbar = ({ address, isAdmin, networkName }) => {
+	const adminColorAddress = () => {
+		if (isAdmin) {
+			return 'bg-green-500';
+		}
+
+		return 'bg-indigo-600';
+	};
 	return (
-		<section className="text-white bg-indigo-600">
+		<section className={`text-white ${adminColorAddress()}`}>
 			<div className="p-8">
-				<h1 className="text-2xl">
-					Hello, 0xd9D5cD41Fe921A743F2b5Fe71CC3070F5C176208
-				</h1>
+				<h1 className="text-2xl">Hello, {address}</h1>
 				<h2 className="subtitle mb-5 text-xl">
 					I hope you are having a great day!
 				</h2>
@@ -22,7 +27,7 @@ const Walletbar = () => {
 					<div>
 						<div>
 							<span>Currently on </span>
-							<strong className="text-2xl">Ethereum Main Network</strong>
+							<strong className="text-2xl">{networkName}</strong>
 						</div>
 					</div>
 				</div>
