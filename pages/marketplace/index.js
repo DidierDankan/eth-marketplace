@@ -1,4 +1,4 @@
-import { CourseCard } from '@components/ui/course';
+import { CourseList } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { getAllCourser } from '@content/course/fetcher';
 import { Walletbar } from '@components/ui/web3';
@@ -18,7 +18,8 @@ export default function Marketplace({ courses }) {
 					networkName={network.data}
 				/>
 			</div>
-			<section className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+			<CourseList courses={courses} />
+			{/* <section className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
 				{courses.map((c) => (
 					<CourseCard
 						key={c.id}
@@ -29,7 +30,7 @@ export default function Marketplace({ courses }) {
 						slug={c.slug}
 					/>
 				))}
-			</section>
+			</section> */}
 		</>
 	);
 }

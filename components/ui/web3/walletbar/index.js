@@ -9,7 +9,15 @@ const Walletbar = ({ address, isAdmin, networkName }) => {
 	return (
 		<section className={`text-white ${adminColorAddress()}`}>
 			<div className="p-8">
-				<h1 className="text-2xl">Hello, {address}</h1>
+				<h1 className="text-2xl">
+					Hello,{' '}
+					{address &&
+						`${
+							address.substr(0, 5) +
+							'...' +
+							address.substr(address.length - 5, address.length)
+						}`}
+				</h1>
 				<h2 className="subtitle mb-5 text-xl">
 					I hope you are having a great day!
 				</h2>
