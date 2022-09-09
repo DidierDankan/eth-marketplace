@@ -43,13 +43,14 @@ export default function Web3Provider({ children }) {
 	//connect to wallet
 	const connectMetamask = useMemo(() => {
 		const { web3, provider } = web3Api;
+		console.log('WEB3', web3);
+		console.log('WHOLE OBJ WEB3', web3Api);
 		return {
 			...web3Api,
-			isWeb3Loaded: web3,
+			isWeb3Loaded: web3 != null,
 			connect: provider
 				? async () => {
 						try {
-							console.log('does it comes in here');
 							await provider.request({ method: 'eth_requestAccounts' });
 						} catch {
 							location.reload();

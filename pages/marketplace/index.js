@@ -8,8 +8,6 @@ export default function Marketplace({ courses }) {
 	const { account } = useAccount();
 	const { network } = useNetwork();
 
-	console.log('ACCOUNT', account);
-
 	return (
 		<>
 			<div className="py-4">

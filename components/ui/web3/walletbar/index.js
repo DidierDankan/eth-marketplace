@@ -1,4 +1,9 @@
+import Link from 'next/link';
+import { useWeb3 } from '@components/provider';
+
 const Walletbar = ({ address, isAdmin, network }) => {
+	const { isWeb3Loaded } = useWeb3();
+	console.log('WHAT', isWeb3Loaded);
 	const adminColorAddress = () => {
 		if (isAdmin) {
 			return 'bg-green-500';
@@ -40,6 +45,16 @@ const Walletbar = ({ address, isAdmin, network }) => {
 									Connect to: <strong>{network.target}</strong>
 								</div>
 							</div>
+						)}
+
+						{!isWeb3Loaded && (
+							<Link href="https://metamask.io/download/" passref>
+								<a target="_blank" rel="noreferrer">
+									<div className="bg-yellow-500 p-4 rounded-lg">
+										Cannot connect to network. Please, install Metamask
+									</div>
+								</a>
+							</Link>
 						)}
 						{network.networkName && (
 							<div>
