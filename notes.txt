@@ -30,3 +30,6 @@ export const useAccount = () => {
 };
 
 the same works for useTest()
+
+
+if a hook is passed to the parent component, all of its children will be re-render, if you need to pass info to the children component and you already use the hook on the parent, is better to pass it trough props, instead of calling again the hook on the children component to use other info of the hook, or else both of them will be re-render so you will have 2 re-renders instead of just one main place that re-render the tree

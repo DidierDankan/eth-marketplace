@@ -9,6 +9,9 @@ module.exports = {
 			maxWidth: {
 				'8xl': '1920px', // this is a created class for tailwind (by default, it doesnt exist)
 			},
+			flex: {
+				'2': '2 2 0%', // this is a created class for tailwind (by default, it doesnt exist)
+			},
 		},
 	},
 	variants: {

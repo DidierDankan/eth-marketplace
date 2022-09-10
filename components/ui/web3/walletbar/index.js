@@ -3,7 +3,7 @@ import { useWeb3 } from '@components/provider';
 
 const Walletbar = ({ address, isAdmin, network }) => {
 	const { isWeb3Loaded } = useWeb3();
-	console.log('WHAT', isWeb3Loaded);
+	
 	const adminColorAddress = () => {
 		if (isAdmin) {
 			return 'bg-green-500';
@@ -12,7 +12,7 @@ const Walletbar = ({ address, isAdmin, network }) => {
 		return 'bg-indigo-600';
 	};
 	return (
-		<section className={`text-white ${adminColorAddress()}`}>
+		<section className={`text-white ${adminColorAddress()} rounded-lg`}>
 			<div className="p-8">
 				<h1 className="text-2xl">
 					Hello,{' '}
@@ -47,7 +47,7 @@ const Walletbar = ({ address, isAdmin, network }) => {
 							</div>
 						)}
 
-						{!isWeb3Loaded && (
+						{!isWeb3Loaded && network.hasInitialResponse && (
 							<Link href="https://metamask.io/download/" passref>
 								<a target="_blank" rel="noreferrer">
 									<div className="bg-yellow-500 p-4 rounded-lg">

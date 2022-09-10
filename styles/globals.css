@@ -7,3 +7,7 @@
   min-height: calc(100vh - 88px);
 }
 
+.next-image-wrapper > span {
+    height: 100% !important;
+}
+
