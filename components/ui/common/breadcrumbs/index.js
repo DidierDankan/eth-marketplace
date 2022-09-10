@@ -1,16 +1,25 @@
+import Link from 'next/link';
+import links from '@helpers/walletLinks';
+import { ActiveLink } from '@components/ui/common';
+
 const Breadcrumbs = () => {
 	return (
-		<nav aria-label="breadcrumb" className="mb-4">
+		<nav aria-label="breadcrumb">
 			<ol className="flex leading-none text-indigo-600 divide-x divide-indigo-400">
-				<li className="pr-4">
-					<a href="#">Buy</a>
-				</li>
-				<li className="px-4">
-					<a href="#">My Orders</a>
-				</li>
-				<li className="px-4">
-					<a href="#">All Orders</a>
-				</li>
+				{links.map((link, index) => {
+					return (
+						<li
+							key={link + index}
+							className={`${
+								index === 0 ? 'pr-4' : 'px-4'
+							} font-medium mr-2 text-gray-500 hover:text-gray-900`}
+						>
+							<ActiveLink href={link.href} passHref>
+								<a>{link.text}</a>
+							</ActiveLink>
+						</li>
+					);
+				})}
 			</ol>
 		</nav>
 	);

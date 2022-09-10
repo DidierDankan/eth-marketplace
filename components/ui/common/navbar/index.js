@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useWeb3 } from '@components/provider';
-import { Button } from '@components/ui/common';
+import { Button, ActiveLink } from '@components/ui/common';
 import { useRouter } from 'next/router';
 import { useAccount } from '@components/web3/hooks';
 
@@ -23,30 +23,30 @@ const Navbar = () => {
 				<nav className="relative" aria-label="Global">
 					<div className="flex justify-between items-center">
 						<div>
-							<Link href="/" passHref>
+							<ActiveLink href="/" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Home
 								</a>
-							</Link>
+							</ActiveLink>
 
-							<Link href="/marketplace" passHref>
+							<ActiveLink href="/marketplace" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Marketplace
 								</a>
-							</Link>
+							</ActiveLink>
 
-							<Link href="/" passHref>
+							<ActiveLink href="/" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Blogs
 								</a>
-							</Link>
+							</ActiveLink>
 						</div>
 						<div>
-							<Link href="/" passHref>
+							<ActiveLink href="/" passHref>
 								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
 									Wishlist
 								</a>
-							</Link>
+							</ActiveLink>
 							{!isProviderLoaded ? (
 								<Button
 									variant={'purple'}

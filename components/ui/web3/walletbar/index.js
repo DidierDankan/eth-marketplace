@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { useWeb3 } from '@components/provider';
+import { useWalletInfo } from '@components/web3/hooks';
 
-const Walletbar = ({ address, isAdmin, network }) => {
+const Walletbar = () => {
 	const { isWeb3Loaded } = useWeb3();
-	
+	const { account, network } = useWalletInfo();
+
 	const adminColorAddress = () => {
-		if (isAdmin) {
+		if (account.isAdmin) {
 			return 'bg-green-500';
 		}
 
@@ -16,11 +18,11 @@ const Walletbar = ({ address, isAdmin, network }) => {
 			<div className="p-8">
 				<h1 className="text-2xl">
 					Hello,{' '}
-					{address &&
+					{account.data &&
 						`${
-							address.substr(0, 5) +
+							account.data.substr(0, 5) +
 							'...' +
-							address.substr(address.length - 5, address.length)
+							account.data.substr(account.data.length - 5, account.data.length)
 						}`}
 				</h1>
 				<h2 className="subtitle mb-5 text-xl">
@@ -42,7 +44,8 @@ const Walletbar = ({ address, isAdmin, network }) => {
 							<div className="bg-red-400 p-4 rounded-lg">
 								<div>Connected to wrong Network</div>
 								<div>
-									Connect to: <strong>{network.target}</strong>
+									Connect to:{' '}
+									<strong className="text-xl">{network.target}</strong>
 								</div>
 							</div>
 						)}
@@ -56,10 +59,10 @@ const Walletbar = ({ address, isAdmin, network }) => {
 								</a>
 							</Link>
 						)}
-						{network.networkName && (
+						{network.data && (
 							<div>
 								<span>Currently on </span>
-								<strong className="text-2xl">{network.networkName}</strong>
+								<strong className="text-2xl">{network.data}</strong>
 							</div>
 						)}
 					</div>
