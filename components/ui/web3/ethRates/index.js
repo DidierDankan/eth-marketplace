@@ -24,9 +24,7 @@ const EthRates = () => {
 			<div className="flex flex-1 items-stretch text-center">
 				<div className="p-10 border drop-shadow rounded-md">
 					<div className="flex items-center">
-						<span className="text-2xl font-bold mr-2">
-							{eth.perItem?.toFixed(6)}
-						</span>
+						<span className="text-2xl font-bold mr-2">{eth.perItem}</span>
 						<Image
 							layout="fixed"
 							width="16"

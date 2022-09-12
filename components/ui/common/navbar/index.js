@@ -19,34 +19,33 @@ const Navbar = () => {
 
 	return (
 		<section>
-			<div className="relative pt-6 px-4 sm:px-6 lg:px-8">
+			<div className="relative pt-6 px-4 sm:px-6 lg:px-8 nav-min-h">
 				<nav className="relative" aria-label="Global">
 					<div className="flex justify-between items-center">
-						<div>
-							<ActiveLink href="/" passHref>
-								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
-									Home
-								</a>
-							</ActiveLink>
+						<ol className="flex">
+							<li className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+								<ActiveLink href="/" passHref>
+									<a>Home</a>
+								</ActiveLink>
+							</li>
+							<li className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+								<ActiveLink href="/marketplace" passHref>
+									<a>Marketplace</a>
+								</ActiveLink>
+							</li>
 
-							<ActiveLink href="/marketplace" passHref>
-								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
-									Marketplace
-								</a>
-							</ActiveLink>
-
-							<ActiveLink href="/" passHref>
-								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
-									Blogs
-								</a>
-							</ActiveLink>
-						</div>
-						<div>
-							<ActiveLink href="/" passHref>
-								<a className="font-medium mr-8 text-gray-500 hover:text-gray-900">
-									Wishlist
-								</a>
-							</ActiveLink>
+							<li className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+								<ActiveLink href="/" passHref>
+									<a>Blogs</a>
+								</ActiveLink>
+							</li>
+						</ol>
+						<div className="flex items-center">
+							<div className="font-medium mr-8 text-gray-500 hover:text-gray-900">
+								<ActiveLink href="/" passHref>
+									<a>Wishlist</a>
+								</ActiveLink>
+							</div>
 							{!isProviderLoaded ? (
 								<Button
 									variant={'purple'}

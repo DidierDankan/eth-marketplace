@@ -1,13 +1,26 @@
-import { OwnedCourseCard } from '@components/ui/course';
+import { CourseFilter, OwnedCourseCard } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { WalletHeader } from '@components/ui/marketplace';
+import { Button } from '@components/ui/common';
 
 export default function ManageCourses() {
 	return (
 		<>
 			<WalletHeader />
+			<CourseFilter />
 			<section className="grid grid-cols-1">
-				<OwnedCourseCard />
+				<OwnedCourseCard>
+					<div className="flex mr-2 relative rounded-md">
+						<input
+							type="text"
+							name="account"
+							id="account"
+							className="w-96 mr-3 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
+							placeholder="0x2341ab..."
+						/>
+						<Button variant="purple">Verify</Button>
+					</div>
+				</OwnedCourseCard>
 			</section>
 		</>
 	);

@@ -16,7 +16,7 @@ const fetcher = async (url) => {
 export const useEthPrice = () => {
 	//you can pass the first param (URL identifier), as the params of the second param: (url) => { code... }
 	const { data, ...rest } = useSWR(URL, fetcher, { refreshInterval: 5000 });
-	let perItem = (data && COURSE_PRICE / Number(data)) ?? null;
+	let perItem = (data && COURSE_PRICE / Number(data))?.toFixed(6) ?? null;
 
 	return { eth: { data, perItem, ...rest } };
 };
