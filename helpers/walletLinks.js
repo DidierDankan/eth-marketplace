@@ -1,6 +1,6 @@
 const links = [
 	{
-		href: '/',
+		href: '/marketplace',
 		text: 'Buy',
 	},
 

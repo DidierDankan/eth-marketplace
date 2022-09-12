@@ -6,27 +6,33 @@ import { Loader } from '@components/ui/common';
 const Noop = ({ children }) => <>{children}</>;
 
 function MyApp({ Component, pageProps }) {
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
 
-	useEffect(() => {
-		setLoading(true);
-	}, []);
+	// useEffect(() => {
+	// 	setLoading(true);
+	// }, []);
 
 	const Layout = Component.Layout ?? Noop;
 
 	return (
-		<>
-			{loading ? (
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			) : (
-				<Layout>
-					<Loader />
-				</Layout>
-			)}
-		</>
+		<Layout>
+			<Component {...pageProps} />
+		</Layout>
 	);
+
+	// return (
+	// 	<>
+	// 		{loading ? (
+	// 			<Layout>
+	// 				<Component {...pageProps} />
+	// 			</Layout>
+	// 		) : (
+	// 			<Layout>
+	// 				<Loader size="lg" />
+	// 			</Layout>
+	// 		)}
+	// 	</>
+	// );
 }
 
 export default MyApp;
