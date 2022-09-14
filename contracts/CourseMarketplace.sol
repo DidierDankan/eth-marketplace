@@ -3,9 +3,9 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Marketplace {
     enum State {
-        Purchased, // 0
-        Activated, // 1
-        Deactivated // 2
+        Purchased,
+        Activated,
+        Deactivated
     }
 
     //for each course
@@ -24,9 +24,10 @@ contract Marketplace {
     mapping(bytes32 => Course) private ownedCourses;
 
     // number of all courses + id of courses
-    uint256 private totalOwnedCourses; // this will be a sort of courseId
+    uint256 private totalOwnedCourses;
 
-    address payable private admin;
+    //admin of courses
+    address payable private owner;
 
     constructor() {
         setContractOwner(msg.sender);
@@ -50,6 +51,7 @@ contract Marketplace {
     function purchaseCourse(bytes16 courseId, bytes32 proof) external payable {
         //this is made to make sure a user buy only one time the course, when user buy we use the courseId + address of user to form a hashed string, if the user trys to buy same course again it will create same hash again
         bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
+
         if (hasCourseOwnership(courseHash)) {
             revert CourseHasOwner();
         }
@@ -91,11 +93,11 @@ contract Marketplace {
     }
 
     function getContractOwner() public view returns (address) {
-        return admin;
+        return owner;
     }
 
     function setContractOwner(address newOwner) private {
-        admin = payable(newOwner);
+        owner = payable(newOwner);
     }
 
     function hasCourseOwnership(bytes32 courseHash)
