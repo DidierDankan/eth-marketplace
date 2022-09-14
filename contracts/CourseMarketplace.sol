@@ -32,7 +32,7 @@ contract Marketplace {
         setContractOwner(msg.sender);
     }
 
-    // with three "/" we create the error msg! amazing...
+    // with three "/" we create the error msg
 
     /// Course has already a Owner!
     error CourseHasOwner();
