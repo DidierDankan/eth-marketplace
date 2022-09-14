@@ -40,3 +40,10 @@ HOOK INTUITION CLASS IS IMPORTANT -- REWATCH WHEN POSSIBLE
 
 -- to install truffle dipendencies and start files --
 truffle init
+
+write contract
+create migration file of contract
+
+with ganache => add truffle.config file to ganache on settings
+
+truffle migrate to deploy contracts
