@@ -1,9 +1,16 @@
-import { CourseFilter, OwnedCourseCard } from '@components/ui/course';
+import { OwnedCourseCard } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { WalletHeader } from '@components/ui/marketplace';
 import { Button } from '@components/ui/common';
+import { useAccount, useOwnedCourses } from '@components/web3/hooks';
+import { getAllCourser } from '@content/course/fetcher';
 
-export default function OwnedCourses() {
+export default function OwnedCourses({ courses }) {
+	const { account } = useAccount();
+
+	const { ownedCourses } = useOwnedCourses(courses, account.data);
+	console.log(ownedCourses);
+
 	return (
 		<div>
 			<WalletHeader />
@@ -17,6 +24,15 @@ export default function OwnedCourses() {
 			</section>
 		</div>
 	);
+}
+
+export function getStaticProps() {
+	const { data } = getAllCourser();
+	return {
+		props: {
+			courses: JSON.parse(JSON.stringify(data)),
+		},
+	};
 }
 
 OwnedCourses.Layout = BaseLayout;

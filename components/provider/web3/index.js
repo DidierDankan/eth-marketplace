@@ -6,14 +6,26 @@ import { loadContract } from '@utils/loadContract';
 
 const Web3Context = createContext(null);
 
+const createWeb3State = ({ provider, web3, contract, isProviderLoaded }) => {
+	return {
+		provider,
+		web3,
+		contract,
+		isProviderLoaded,
+		//use to call hooks that depend on web3, we pass web3 as argument
+		hooks: setupHooks({ provider, web3, contract }),
+	};
+};
+
 export default function Web3Provider({ children }) {
-	const [web3Api, setWeb3Api] = useState({
-		provider: null,
-		web3: null,
-		contract: null,
-		isProviderLoaded: false,
-		hooks: setupHooks(),
-	});
+	const [web3Api, setWeb3Api] = useState(
+		createWeb3State({
+			web3: null,
+			provider: null,
+			contract: null,
+			isProviderLoaded: false,
+		})
+	);
 	//load web3 provider
 	useEffect(() => {
 		const loadProvider = async () => {
@@ -22,14 +34,14 @@ export default function Web3Provider({ children }) {
 			if (provider) {
 				const web3 = new Web3(provider);
 				const contract = await loadContract('Marketplace', web3);
-				setWeb3Api({
-					web3,
-					provider,
-					contract: contract,
-					isProviderLoaded: true,
-					//use to call hooks that depend on web3, we pass web3 as argument
-					hooks: setupHooks(web3),
-				});
+				setWeb3Api(
+					createWeb3State({
+						web3,
+						provider,
+						contract: contract,
+						isProviderLoaded: true,
+					})
+				);
 			} else {
 				setWeb3Api((prev) => ({
 					...prev,
