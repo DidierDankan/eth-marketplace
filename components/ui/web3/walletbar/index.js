@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useWeb3 } from '@components/provider';
 import { useWalletInfo } from '@components/web3/hooks';
+import { Button } from '@components/ui/common';
 
 const Walletbar = () => {
 	const { isWeb3Loaded } = useWeb3();
@@ -16,7 +17,7 @@ const Walletbar = () => {
 	return (
 		<section className={`text-white ${adminColorAddress()} rounded-lg`}>
 			<div className="p-8">
-				<h1 className="text-2xl">
+				<h1 className="text-base xs:text-xl">
 					Hello,{' '}
 					{account.data &&
 						`${
@@ -25,19 +26,14 @@ const Walletbar = () => {
 							account.data.substr(account.data.length - 5, account.data.length)
 						}`}
 				</h1>
-				<h2 className="subtitle mb-5 text-xl">
+				<h2 className="subtitle mb-5 text-sm xs:text-base">
 					I hope you are having a great day!
 				</h2>
 				<div className="flex justify-between items-center">
 					<div className="sm:flex sm:justify-center lg:justify-start">
-						<div className="rounded-md shadow">
-							<a
-								href="#"
-								className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-black bg-white hover:bg-gray-100 md:py-4 md:text-lg md:px-10"
-							>
-								Learn how to purchase
-							</a>
-						</div>
+						<Button variant="white" className="mr-2 text-sm xs:text-lg p-2">
+							Learn how to purchase
+						</Button>
 					</div>
 					<div>
 						{network.hasInitialResponse && !network.isSupported && (

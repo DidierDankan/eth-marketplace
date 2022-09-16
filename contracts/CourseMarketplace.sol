@@ -29,6 +29,7 @@ contract Marketplace {
     //admin of courses
     address payable private owner;
 
+    // this runs when the contract is deployed setting the owner of the contract
     constructor() {
         setContractOwner(msg.sender);
     }
@@ -41,6 +42,7 @@ contract Marketplace {
     /// Only owner has access!
     error OnlyOwner();
 
+    // a modifier, we can use it in the parameter of the function like we do in transferOwnership()
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
             revert OnlyOwner();
@@ -49,9 +51,10 @@ contract Marketplace {
     }
 
     function purchaseCourse(bytes16 courseId, bytes32 proof) external payable {
-        //this is made to make sure a user buy only one time the course, when user buy we use the courseId + address of user to form a hashed string, if the user trys to buy same course again it will create same hash again
+        //this is creating a hashed string with the course id + msg.sender(account buying the course) and it works as a identifier
         bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
 
+        //this is made to make sure a user buy only one time the course, when user buy we use the courseId + address of user to form a hashed string, if the user trys to buy same course again it will create same hash again
         if (hasCourseOwnership(courseHash)) {
             revert CourseHasOwner();
         }
@@ -84,6 +87,7 @@ contract Marketplace {
         return ownedCourseHash[index];
     }
 
+    //this function is used to find all the courses a account own, we use it in ownedCoursesHandler.js
     function getCourseByHash(bytes32 courseHash)
         external
         view

@@ -31,10 +31,11 @@ export const useNetwork = () => {
 };
 
 export const useOwnedCourses = (...args) => {
-	const res = enhanceHook(useHooks((hooks) => hooks.useOwnedCourses)(...args));
-
+	const resSWR = enhanceHook(
+		useHooks((hooks) => hooks.useOwnedCourses)(...args)
+	);
 	return {
-		ownedCourses: res,
+		ownedCourses: resSWR,
 	};
 };
 

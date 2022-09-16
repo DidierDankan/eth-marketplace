@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSwr from 'swr';
 
 const URL =
 	'https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false';
@@ -15,7 +15,7 @@ const fetcher = async (url) => {
 
 export const useEthPrice = () => {
 	//you can pass the first param (URL identifier), as the params of the second param: (url) => { code... }
-	const { data, ...rest } = useSWR(URL, fetcher, { refreshInterval: 5000 });
+	const { data, ...rest } = useSwr(URL, fetcher, { refreshInterval: 10000 });
 	let perItem = (data && COURSE_PRICE / Number(data))?.toFixed(6) ?? null;
 
 	return { eth: { data, perItem, ...rest } };

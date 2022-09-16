@@ -54,7 +54,7 @@ export default function Marketplace({ courses }) {
 					<CourseCard
 						key={course.id}
 						course={course}
-						disable={!canPurchaseCourse}
+						disabled={!canPurchaseCourse}
 						Footer={() => (
 							<div className="mt-4">
 								<Button
