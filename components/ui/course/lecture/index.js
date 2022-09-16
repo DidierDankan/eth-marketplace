@@ -1,10 +1,13 @@
+import { Loader } from '@components/ui/common';
 import lectures from 'helpers/lectures';
+import Link from 'next/link';
 
-const Lecture = ({ lock }) => {
+const Lecture = ({ lock, courseState }) => {
+	console.log(courseState === 'purchased');
 	const statusClass =
 		'px-2 inline-flex text-xs leading-5 font-semibold rounded-full';
 	return (
-		<section className="max-w-5xl mx-auto">
+		<section className="max-w-5xl mx-auto mb-5">
 			<div className="flex flex-col">
 				<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 					<div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -42,23 +45,47 @@ const Lecture = ({ lock }) => {
 												</div>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap">
-												<span
-													className={
-														lock
-															? `bg-red-100 text-red-800 ${statusClass}`
-															: `bg-green-100 text-green-800 ${statusClass}`
-													}
-												>
-													{lock ? 'locked' : 'Unlocked'}
-												</span>
+												{courseState ? (
+													<span
+														className={
+															lock
+																? `bg-red-100 text-red-800 ${statusClass}`
+																: `bg-green-100 text-green-800 ${statusClass}`
+														}
+													>
+														{lock ? 'locked' : 'Unlocked'}
+													</span>
+												) : (
+													<Loader />
+												)}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<a
-													href="#"
-													className="text-indigo-600 hover:text-indigo-900"
-												>
-													{lock ? 'Get access' : 'Play'}
-												</a>
+												{lock ? (
+													<>
+														{courseState && courseState === 'deactivated' && (
+															<Link href="/marketplace" passHref>
+																<a className="text-indigo-600 hover:text-indigo-900">
+																	Get access
+																</a>
+															</Link>
+														)}
+														{courseState && courseState === 'purchased' && (
+															<Link href="/faq" passHref>
+																<a className="text-yellow-600 hover:text-yellow-900">
+																	Waiting for Activation...
+																</a>
+															</Link>
+														)}
+													</>
+												) : (
+													courseState && (
+														<Link href="/watch" passHref>
+															<a className="text-indigo-600 hover:text-indigo-900">
+																Get Access
+															</a>
+														</Link>
+													)
+												)}
 											</td>
 										</tr>
 									))}

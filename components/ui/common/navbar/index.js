@@ -40,8 +40,8 @@ const Navbar = () => {
 								</ActiveLink>
 							</li>
 						</ol>
-						<div className="text-center">
-							<div className="font-medium sm:mr-8 mr-1 text-gray-500 hover:text-gray-900">
+						<div className="text-center md:flex md:items-center">
+							<div className="font-medium text-sm lg:text-lg md:text-base md:mr-8 text-gray-500 hover:text-gray-900">
 								<ActiveLink href="/" passHref>
 									<a>Wishlist</a>
 								</ActiveLink>
