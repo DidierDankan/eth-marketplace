@@ -2,13 +2,14 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract Marketplace {
+    // course state
     enum State {
         Purchased,
         Activated,
         Deactivated
     }
 
-    //for each course
+    //structure for each course
     struct Course {
         //meaning of the 32 byte is for the storage, that each slot takes 32 bytes
         uint256 id; // 32 byte
@@ -48,6 +49,9 @@ contract Marketplace {
     ///Course is does not exist!
     error CourseIsNotCreated();
 
+    ///Sender is not course owner!
+    error SenderIsNotCourseOwner();
+
     // a modifier, we can use it in the parameter of the function like we do in transferOwnership()
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
@@ -78,6 +82,27 @@ contract Marketplace {
         });
     }
 
+    // repurchase same course after deactivating
+    function repurchasedCourse(bytes32 courseHash) external payable {
+        if (!isCourseCreated(courseHash)) {
+            revert CourseIsNotCreated();
+        }
+
+        if (!hasCourseOwnership(courseHash)) {
+            revert SenderIsNotCourseOwner();
+        }
+
+        //how to access courses in storage
+        Course storage course = ownedCourses[courseHash];
+
+        if (course.state != State.Deactivated) {
+            revert InvalidState();
+        }
+
+        course.state = State.Purchased;
+        course.price = msg.value;
+    }
+
     // activate the course after you buy it
     function activateCourse(bytes32 courseHash) external onlyOwner {
         if (!isCourseCreated(courseHash)) {
@@ -93,6 +118,27 @@ contract Marketplace {
         course.state = State.Activated;
     }
 
+    // deactivate the course after owner activate it
+    function deactivateCourse(bytes32 courseHash) external onlyOwner {
+        if (!isCourseCreated(courseHash)) {
+            revert CourseIsNotCreated();
+        }
+
+        Course storage course = ownedCourses[courseHash];
+
+        if (course.state != State.Purchased) {
+            revert InvalidState();
+        }
+
+        // return any value to the buyer of the course
+        (bool success, ) = course.owner.call{value: course.price}("");
+        require(success, "Transfer failed!");
+
+        course.state = State.Deactivated;
+        course.price = 0;
+    }
+
+    //transfer ownership of contract to other address,only the owner of the contract has that power
     function transferOwnership(address newOwner) external onlyOwner {
         setContractOwner(newOwner);
     }
@@ -120,10 +166,12 @@ contract Marketplace {
         return ownedCourses[courseHash];
     }
 
+    //return contract owner
     function getContractOwner() public view returns (address) {
         return owner;
     }
 
+    //set contract owner
     function setContractOwner(address newOwner) private {
         owner = payable(newOwner);
     }
@@ -134,6 +182,7 @@ contract Marketplace {
             0x0000000000000000000000000000000000000000;
     }
 
+    //to check if the course is purchased by someone when confronting ownership
     function hasCourseOwnership(bytes32 courseHash)
         private
         view
