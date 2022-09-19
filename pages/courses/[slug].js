@@ -9,7 +9,10 @@ export default function Course({ course }) {
 	const { ownedCourse } = useOwnedCourse(course, account.data);
 	const courseState = ownedCourse.data?.state;
 
-	const isLocked = courseState === 'purchased' || courseState === 'deactivated';
+	const isLocked =
+		!courseState ||
+		courseState === 'purchased' ||
+		courseState === 'deactivated';
 
 	const showCourseState = () => {
 		if (courseState === 'purchased') {
@@ -62,7 +65,11 @@ export default function Course({ course }) {
 			{courseState && (
 				<div className="max-w-5xl mx-auto">{showCourseState()}</div>
 			)}
-			<Lecture lock={isLocked} courseState={courseState} />
+			<Lecture
+				isLoading={!account.hasInitialResponse}
+				lock={isLocked}
+				courseState={courseState}
+			/>
 			<Modal />
 		</>
 	);

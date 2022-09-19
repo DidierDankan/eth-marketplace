@@ -1,9 +1,23 @@
 import { useHooks } from '@components/provider/web3';
 
+// check if we have any kind of data
+const _isEmpty = (data) => {
+	return (
+		data == null || // with double equal operator we can check if data is null or undefined in the same statement
+		data == '' ||
+		(Array.isArray(data) && data.length === 0) ||
+		(data.constructor === Object && Object.keys(data).length === 0)
+	);
+};
+
 const enhanceHook = (swrRes) => {
+	const { data, error } = swrRes;
+	const hasInitialResponse = !!(data || error);
+	const isEmpty = hasInitialResponse && _isEmpty(data);
 	return {
 		...swrRes,
-		hasInitialResponse: swrRes.data || swrRes.error,
+		isEmpty,
+		hasInitialResponse: hasInitialResponse,
 	};
 };
 

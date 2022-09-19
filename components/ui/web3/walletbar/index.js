@@ -46,7 +46,7 @@ const Walletbar = () => {
 							</div>
 						)}
 
-						{!isWeb3Loaded && network.hasInitialResponse && (
+						{!isWeb3Loaded && !network.hasInitialResponse && (
 							<Link href="https://metamask.io/download/" passref>
 								<a target="_blank" rel="noreferrer">
 									<div className="bg-yellow-500 p-4 rounded-lg">

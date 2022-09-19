@@ -2,8 +2,7 @@ import { Loader } from '@components/ui/common';
 import lectures from 'helpers/lectures';
 import Link from 'next/link';
 
-const Lecture = ({ lock, courseState }) => {
-	console.log(courseState === 'purchased');
+const Lecture = ({ lock, courseState, isLoading }) => {
 	const statusClass =
 		'px-2 inline-flex text-xs leading-5 font-semibold rounded-full';
 	return (
@@ -45,22 +44,20 @@ const Lecture = ({ lock, courseState }) => {
 												</div>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap">
-												{courseState ? (
-													<span
-														className={
-															lock
-																? `bg-red-100 text-red-800 ${statusClass}`
-																: `bg-green-100 text-green-800 ${statusClass}`
-														}
-													>
-														{lock ? 'locked' : 'Unlocked'}
-													</span>
-												) : (
-													<Loader />
-												)}
+												<span
+													className={
+														lock
+															? `bg-red-100 text-red-800 ${statusClass}`
+															: `bg-green-100 text-green-800 ${statusClass}`
+													}
+												>
+													{lock ? 'locked' : 'Unlocked'}
+												</span>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												{lock ? (
+												{isLoading ? (
+													<Loader />
+												) : lock ? (
 													<>
 														{courseState && courseState === 'deactivated' && (
 															<Link href="/marketplace" passHref>

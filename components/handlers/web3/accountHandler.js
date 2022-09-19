@@ -18,18 +18,27 @@ export const handler = (web3, provider) => () => {
 		//callback function
 		async () => {
 			const accounts = await web3.eth.getAccounts();
-			return accounts[0];
+			const account = accounts[0];
+			if (!account) {
+				throw new Error('Cannot retrieve account, please refresh the browser');
+			}
+			return account;
 		}
 	); // will return swrRes.data, swrRes.error
 
 	//this handles the change of address of our portfolio
 	useEffect(() => {
-		window.ethereum &&
-			window.ethereum.on('accountsChanged', (account) => {
-				// Sometimes, you want to update a part of your data based on the current data.
-				// With mutate, you can pass an async function which will receive the current cached value, if any, and returns an updated document. The SWR object returned by useSWR also contains a mutate() function that is pre-bound to the SWR's key, it does not require the key parameter.
-				mutate(account[0] ?? null);
-			});
+		// Sometimes, you want to update a part of your data based on the current data.
+		// With mutate, you can pass an async function which will receive the current cached value, if any, and returns an updated document. The SWR object returned by useSWR also contains a mutate() function that is pre-bound to the SWR's key, it does not require the key parameter.
+		const mutator = (accounts) => {
+			mutate(accounts[0] ?? null);
+		};
+		window.ethereum && window.ethereum.on('accountsChanged', mutator);
+
+		//clean up function to un-subscribe when changing ACCOUNT
+		return () => {
+			window.ethereum.removeListener('accountsChanged', mutator);
+		};
 	}, [mutate]);
 
 	return {

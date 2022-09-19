@@ -1,16 +1,34 @@
 import { useEffect, useState } from 'react';
 
 import '@styles/globals.css';
-import { Loader } from '@components/ui/common';
 
 const Noop = ({ children }) => <>{children}</>;
 
 function MyApp({ Component, pageProps }) {
-	// const [loading, setLoading] = useState(false);
-
-	// useEffect(() => {
-	// 	setLoading(true);
-	// }, []);
+	useEffect(() => {
+		Array.from(
+			document.querySelectorAll('head > link[rel="stylesheet"][data-n-p]')
+		).forEach((node) => {
+			node.removeAttribute('data-n-p');
+		});
+		const mutationHandler = (mutations) => {
+			mutations.forEach(({ target }) => {
+				if (target.nodeName === 'STYLE') {
+					if (target.getAttribute('media') === 'x') {
+						target.removeAttribute('media');
+					}
+				}
+			});
+		};
+		const observer = new MutationObserver(mutationHandler);
+		observer.observe(document.head, {
+			subtree: true,
+			attributeFilter: ['media'],
+		});
+		return () => {
+			observer.disconnect();
+		};
+	}, []);
 
 	const Layout = Component.Layout ?? Noop;
 
@@ -19,20 +37,6 @@ function MyApp({ Component, pageProps }) {
 			<Component {...pageProps} />
 		</Layout>
 	);
-
-	// return (
-	// 	<>
-	// 		{loading ? (
-	// 			<Layout>
-	// 				<Component {...pageProps} />
-	// 			</Layout>
-	// 		) : (
-	// 			<Layout>
-	// 				<Loader size="lg" />
-	// 			</Layout>
-	// 		)}
-	// 	</>
-	// );
 }
 
 export default MyApp;

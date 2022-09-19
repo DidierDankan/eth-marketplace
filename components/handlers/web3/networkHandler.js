@@ -11,16 +11,26 @@ export const handler = (web3, provider) => () => {
 		},
 		async () => {
 			//get current chainId
-			const netId = await web3.eth.getChainId();
-			return EnumNetworks[netId].name;
+			const chainId = await web3.eth.getChainId();
+
+			if (!chainId) {
+				throw new Error('Cannot retrieve network, please refresh the browser');
+			}
+
+			return EnumNetworks[chainId].name;
 		}
 	);
 	useEffect(() => {
+		const mutator = (chainId) => {
+			mutate(EnumNetworks[parseInt(chainId, 16)].name);
+		};
 		//mutate state when changed so it refresh without reloading page
-		window.ethereum &&
-			window.ethereum.on('chainChanged', (chainId) => {
-				mutate(EnumNetworks[parseInt(chainId, 16)].name);
-			});
+		window.ethereum && window.ethereum.on('chainChanged', mutator);
+
+		//clean up function to un-subscribe when changing NETWORK
+		return () => {
+			window.ethereum.removeListener('chainChanged', mutator);
+		};
 	}, [mutate]);
 
 	return {

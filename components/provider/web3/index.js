@@ -45,7 +45,7 @@ export default function Web3Provider({ children }) {
 			} else {
 				setWeb3Api((prev) => ({
 					...prev,
-					isProviderLoaded: false,
+					isProviderLoaded: true,
 				})),
 					console.error('Please, install Matamask');
 			}

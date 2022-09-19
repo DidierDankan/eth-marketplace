@@ -1,4 +1,5 @@
 import { normalizeOwnedCourse } from '@utils/normalize';
+import { createCorseHash } from '@utils/hash';
 import useSwr from 'swr';
 
 export const handler = (web3, contract) => (courses, account) => {
@@ -15,21 +16,7 @@ export const handler = (web3, contract) => (courses, account) => {
 					continue;
 				}
 
-				//transform course id into hash (something like this 0x31313132343331)
-				const hexCourseId = web3.utils.utf8ToHex(course.id);
-
-				//course hash wich is a hash made by the course id + the account (something like this 0x6f4b930f3b55568a587638fd9ad5ff059793c0bce09da4bb051862226b2a17ba)
-				//this will be the course identifier to find it with the next function
-				const courseHash = web3.utils.soliditySha3(
-					{
-						type: 'bytes16',
-						value: hexCourseId,
-					},
-					{
-						type: 'address',
-						value: account,
-					}
-				);
+				const courseHash = createCorseHash(web3)(course.id, account);
 
 				//then we can find the course by its hashed string
 				//call() its a method of the smart contracts to call function of the contract, as well as send()

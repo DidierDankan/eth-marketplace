@@ -9,6 +9,9 @@ const Navbar = () => {
 	const { account } = useAccount();
 	const router = useRouter();
 
+	console.log(isProviderLoaded);
+	console.log(isWeb3Loaded);
+
 	const hideAddress = () => {
 		if (router.asPath.includes('/marketplace')) {
 			return true;
@@ -33,59 +36,52 @@ const Navbar = () => {
 									<a>Marketplace</a>
 								</ActiveLink>
 							</li>
-
-							<li className="font-medium text-sm lg:text-lg md:text-base mr-4 sm:mr-8 text-gray-500 hover:text-gray-900">
-								<ActiveLink href="/" passHref>
-									<a>Blogs</a>
-								</ActiveLink>
-							</li>
 						</ol>
 						<div className="text-center md:flex md:items-center">
 							<div className="font-medium text-sm lg:text-lg md:text-base md:mr-8 text-gray-500 hover:text-gray-900">
-								<ActiveLink href="/" passHref>
+								<ActiveLink href="/wishlist" passHref>
 									<a>Wishlist</a>
 								</ActiveLink>
 							</div>
-							{!isProviderLoaded ? (
-								<Button
-									variant={'purple'}
-									disabled={true}
-									onClick={() => connect()}
-								>
-									Loading...
-								</Button>
-							) : isWeb3Loaded ? (
-								!account.data ? (
-									<Button variant={'purple'} onClick={() => connect()}>
-										Connect
+							{!hideAddress() &&
+								(!isProviderLoaded && !isWeb3Loaded ? (
+									<Button disabled={true} variant="lightBlue">
+										Loading...
 									</Button>
 								) : (
-									!hideAddress() && (
-										<Button
-											variant={account.isAdmin ? 'green' : 'purple'}
-											className={'cursor-default'}
-										>
-											{`${
-												account.data.substr(0, 5) +
-												'...' +
-												account.data.substr(
-													account.data.length - 5,
-													account.data.length
-												)
-											}`}
-										</Button>
-									)
-								)
-							) : (
-								<a
-									target="_blank"
-									href="https://metamask.io/download/"
-									rel="noreferrer"
-									className="px-4 py-2 border text-base rounded-lg text-white bg-indigo-600 hover:bg-indigo-700"
-								>
-									Install Metamask
-								</a>
-							)}
+									<div>
+										{isWeb3Loaded ? (
+											!account.data ? (
+												<Button variant={'purple'} onClick={() => connect()}>
+													Connect
+												</Button>
+											) : (
+												<Button
+													variant={account.isAdmin ? 'green' : 'purple'}
+													className={'cursor-default'}
+												>
+													{`${
+														account.data.substr(0, 5) +
+														'...' +
+														account.data.substr(
+															account.data.length - 5,
+															account.data.length
+														)
+													}`}
+												</Button>
+											)
+										) : (
+											<a
+												target="_blank"
+												href="https://metamask.io/download/"
+												rel="noreferrer"
+												className="px-4 py-2 border text-base rounded-lg text-white bg-indigo-600 hover:bg-indigo-700"
+											>
+												Install Metamask
+											</a>
+										)}
+									</div>
+								))}
 						</div>
 					</div>
 				</nav>
