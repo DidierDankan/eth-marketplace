@@ -26,7 +26,7 @@ export default function OrderModal({ course, onClose, onSubmit }) {
 				price: eth.perItem,
 			});
 		}
-	}, [course]);
+	}, [course, eth.perItem]);
 
 	const _onClose = () => {
 		onClose();

@@ -1,4 +1,4 @@
-export const createCorseHash = (web3) => (courseId, account) => {
+export const createCourseHash = (web3) => (courseId, account) => {
 	//transform course id into hash (something like this 0x31313132343331)
 	const hexCourseId = web3.utils.utf8ToHex(courseId);
 

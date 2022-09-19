@@ -42,6 +42,12 @@ contract Marketplace {
     /// Only owner has access!
     error OnlyOwner();
 
+    ///Course has invalid state!
+    error InvalidState();
+
+    ///Course is does not exist!
+    error CourseIsNotCreated();
+
     // a modifier, we can use it in the parameter of the function like we do in transferOwnership()
     modifier onlyOwner() {
         if (msg.sender != getContractOwner()) {
@@ -62,6 +68,7 @@ contract Marketplace {
         uint256 id = totalOwnedCourses++;
 
         ownedCourseHash[id] = courseHash;
+        //we use the courseHash as key of each element
         ownedCourses[courseHash] = Course({
             id: id,
             price: msg.value,
@@ -71,14 +78,31 @@ contract Marketplace {
         });
     }
 
+    // activate the course after you buy it
+    function activateCourse(bytes32 courseHash) external onlyOwner {
+        if (!isCourseCreated(courseHash)) {
+            revert CourseIsNotCreated();
+        }
+
+        Course storage course = ownedCourses[courseHash];
+
+        if (course.state != State.Purchased) {
+            revert InvalidState();
+        }
+
+        course.state = State.Activated;
+    }
+
     function transferOwnership(address newOwner) external onlyOwner {
         setContractOwner(newOwner);
     }
 
+    //we use this function in manageCoursesHandler
     function getCourseCount() external view returns (uint256) {
         return totalOwnedCourses;
     }
 
+    //we use this function in manageCoursesHandler
     function getCourseHashAtIndex(uint256 index)
         external
         view
@@ -87,7 +111,7 @@ contract Marketplace {
         return ownedCourseHash[index];
     }
 
-    //this function is used to find all the courses a account own, we use it in ownedCoursesHandler.js
+    //this function is used to find all the courses a account own, we use it in ownedCoursesHandler.js && manageCoursesHandler
     function getCourseByHash(bytes32 courseHash)
         external
         view
@@ -102,6 +126,12 @@ contract Marketplace {
 
     function setContractOwner(address newOwner) private {
         owner = payable(newOwner);
+    }
+
+    function isCourseCreated(bytes32 courseHash) private view returns (bool) {
+        return
+            ownedCourses[courseHash].owner !=
+            0x0000000000000000000000000000000000000000;
     }
 
     function hasCourseOwnership(bytes32 courseHash)
