@@ -19,6 +19,8 @@ contract Marketplace {
         State state; // 1 byte
     }
 
+    bool public isStopped = false;
+
     // mapping of courseID to courseHash
     mapping(uint256 => bytes32) private ownedCourseHash;
     // mapping of courseHash to Course data
@@ -60,7 +62,49 @@ contract Marketplace {
         _;
     }
 
-    function purchaseCourse(bytes16 courseId, bytes32 proof) external payable {
+    modifier onlyWhenNotStopped() {
+        require(!isStopped);
+        _;
+    }
+
+    modifier onlyWhenStopped() {
+        require(isStopped);
+        _;
+    }
+
+    // this function allow us to send amounts to other contracts from metamask
+    receive() external payable {}
+
+    function widthdraw(uint256 amount) external onlyWhenNotStopped onlyOwner {
+        // transfer the passed amount to the owner of contract
+        (bool success, ) = owner.call{value: amount}("");
+        require(success, "Transfer failed!");
+    }
+
+    function emergencyWidthdraw() external onlyWhenStopped onlyOwner {
+        // transfer the current balance of smart contract to the owner of contract
+        (bool success, ) = owner.call{value: address(this).balance}("");
+        require(success, "Transfer failed!");
+    }
+
+    //arase contract from blockChain and will tranfer all the balance of the contract to owner (or who ever is specified)
+    function _selfDestruct() external onlyWhenStopped onlyOwner {
+        selfdestruct(owner);
+    }
+
+    function stopContract() external onlyOwner {
+        isStopped = true;
+    }
+
+    function resumeContract() external onlyOwner {
+        isStopped = false;
+    }
+
+    function purchaseCourse(bytes16 courseId, bytes32 proof)
+        external
+        payable
+        onlyWhenNotStopped
+    {
         //this is creating a hashed string with the course id + msg.sender(account buying the course) and it works as a identifier
         bytes32 courseHash = keccak256(abi.encodePacked(courseId, msg.sender));
 
@@ -83,7 +127,11 @@ contract Marketplace {
     }
 
     // repurchase same course after deactivating
-    function repurchasedCourse(bytes32 courseHash) external payable {
+    function repurchasedCourse(bytes32 courseHash)
+        external
+        payable
+        onlyWhenNotStopped
+    {
         if (!isCourseCreated(courseHash)) {
             revert CourseIsNotCreated();
         }
@@ -104,7 +152,11 @@ contract Marketplace {
     }
 
     // activate the course after you buy it
-    function activateCourse(bytes32 courseHash) external onlyOwner {
+    function activateCourse(bytes32 courseHash)
+        external
+        onlyWhenNotStopped
+        onlyOwner
+    {
         if (!isCourseCreated(courseHash)) {
             revert CourseIsNotCreated();
         }
@@ -119,7 +171,11 @@ contract Marketplace {
     }
 
     // deactivate the course
-    function deactivateCourse(bytes32 courseHash) external onlyOwner {
+    function deactivateCourse(bytes32 courseHash)
+        external
+        onlyWhenNotStopped
+        onlyOwner
+    {
         if (!isCourseCreated(courseHash)) {
             revert CourseIsNotCreated();
         }

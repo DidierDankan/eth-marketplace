@@ -284,4 +284,138 @@ contract('CourseMarketplace', (accounts) => {
 			);
 		});
 	});
+
+	describe('RECEIVE FUNDS', () => {
+		it('should have transacted funds', async () => {
+			const valueToSend = '100000000000000000';
+			const contractBeforeTx = await getBalance(_contract.address);
+
+			await web3.eth.sendTransaction({
+				from: buyer,
+				to: _contract.address,
+				value: valueToSend,
+			});
+			const contractAfterTx = await getBalance(_contract.address);
+
+			assert.equal(
+				toBN(contractBeforeTx).add(toBN(valueToSend)).toString(),
+				contractAfterTx,
+				'Value after transaction is not matching!'
+			);
+		});
+	});
+
+	describe('NORMAL WITHDRAW', () => {
+		const fundsToDeposit = '100000000000000000';
+		const overLimitFunds = '99999990000000000000';
+		let currentOwner = null;
+
+		before(async () => {
+			await web3.eth.sendTransaction({
+				from: buyer,
+				to: _contract.address,
+				value: fundsToDeposit,
+			});
+			currentOwner = await _contract.getContractOwner();
+		});
+
+		it('should fail when widthdrawing with not owner address', async () => {
+			const funds = '100000000000000000';
+			await catchRevert(_contract.widthdraw(funds, { from: buyer }));
+		});
+
+		it('should fail when widthdrawing OVER limit balance', async () => {
+			await catchRevert(
+				_contract.widthdraw(overLimitFunds, { from: currentOwner })
+			);
+		});
+
+		it('should have +0.1ETH after widthdraw', async () => {
+			const ownerBalance = await getBalance(currentOwner);
+			const result = await _contract.widthdraw(fundsToDeposit, {
+				from: currentOwner,
+			});
+			const newOwnerBalance = await getBalance(currentOwner);
+
+			const gas = await getGas(result);
+
+			assert.equal(
+				toBN(ownerBalance).add(toBN(fundsToDeposit)).sub(gas).toString(),
+				newOwnerBalance,
+				'The new owner balance is not correct!'
+			);
+		});
+	});
+
+	describe('EMERGENCY WITHDRAW', () => {
+		let currentOwner;
+
+		before(async () => (currentOwner = await _contract.getContractOwner()));
+
+		after(async () => await _contract.resumeContract({ from: currentOwner }));
+
+		it('should fail when contract is NOT stopped ', async () => {
+			await catchRevert(_contract.emergencyWidthdraw({ from: currentOwner }));
+		});
+
+		it('should have contract funds on contract owner ', async () => {
+			await _contract.stopContract({ from: currentOwner });
+			const contractBalance = await getBalance(_contract.address);
+			const ownerBalance = await getBalance(currentOwner);
+
+			const result = await _contract.emergencyWidthdraw({ from: currentOwner });
+			const gas = await getGas(result);
+
+			const newOwnerBalance = await getBalance(currentOwner);
+			assert.equal(
+				toBN(ownerBalance).add(toBN(contractBalance)).sub(gas),
+				newOwnerBalance,
+				'owner doesnt have contract balance'
+			);
+		});
+
+		it('should have contract balance of 0 ', async () => {
+			const contractBalance = await getBalance(_contract.address);
+
+			assert.equal(contractBalance, 0, 'contract doesnt have 0 balance');
+		});
+	});
+
+	describe('SELF DESTRUCT', () => {
+		let currentOwner;
+
+		before(async () => (currentOwner = await _contract.getContractOwner()));
+
+		it('should fail when contract is NOT stopped ', async () => {
+			await catchRevert(_contract._selfDestruct({ from: currentOwner }));
+		});
+
+		it('should have contract funds on contract owner ', async () => {
+			await _contract.stopContract({ from: currentOwner });
+			const contractBalance = await getBalance(_contract.address);
+			const ownerBalance = await getBalance(currentOwner);
+
+			const result = await _contract._selfDestruct({ from: currentOwner });
+			const gas = await getGas(result);
+
+			const newOwnerBalance = await getBalance(currentOwner);
+			assert.equal(
+				toBN(ownerBalance).add(toBN(contractBalance)).sub(gas),
+				newOwnerBalance,
+				'owner doesnt have contract balance'
+			);
+		});
+
+		it('should have contract balance of 0 after self destruct ', async () => {
+			const contractBalance = await getBalance(_contract.address);
+
+			assert.equal(contractBalance, 0, 'contract doesnt have 0 balance');
+		});
+
+		it('should have 0x bytecode', async () => {
+			const code = await web3.eth.getCode(_contract.address);
+
+			assert.equal(code, '0x', 'Contract is not destoyed!');
+		});
+	});
 });
