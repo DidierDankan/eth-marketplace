@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { WalletHeader } from '@components/ui/marketplace';
 import { useWeb3 } from '@components/provider';
 import { useOwnedCourses } from '@components/web3/hooks';
-import { STATE_COLORS } from '@helpers/stateColor';
 
 export default function Marketplace({ courses }) {
 	const { web3, contract } = useWeb3();
