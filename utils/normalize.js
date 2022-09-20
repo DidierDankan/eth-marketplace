@@ -1,7 +1,7 @@
 export const COURSE_STATES = {
 	0: 'purchased',
 	1: 'activated',
-	3: 'deactivated',
+	2: 'deactivated',
 };
 
 // here wer merging info together course + courseOwned

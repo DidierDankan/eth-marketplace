@@ -1,15 +1,15 @@
+import Link from 'next/link';
 import { OwnedCourseCard } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { WalletHeader } from '@components/ui/marketplace';
 import { Button, Message } from '@components/ui/common';
-import { useAccount, useOwnedCourses } from '@components/web3/hooks';
+import { useOwnedCourses, useWalletInfo } from '@components/web3/hooks';
 import { getAllCourser } from '@content/course/fetcher';
-import Link from 'next/link';
 
 export default function OwnedCourses({ courses }) {
-	const { account } = useAccount();
+	const { account, network } = useWalletInfo();
 
-	const { ownedCourses } = useOwnedCourses(courses, account.data);
+	const { ownedCourses } = useOwnedCourses(courses, account.data, network.data);
 
 	return (
 		<div>

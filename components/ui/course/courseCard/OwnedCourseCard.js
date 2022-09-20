@@ -1,10 +1,5 @@
 import Image from 'next/image';
-
-const STATE_COLORS = {
-	purchased: 'orange',
-	activated: 'green',
-	deactivated: 'red',
-};
+import { STATE_COLORS } from '@helpers/stateColor';
 
 export default function OwnedCourseCard({ children, course }) {
 	const stateColor = STATE_COLORS[course?.state];

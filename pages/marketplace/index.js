@@ -2,16 +2,20 @@ import { CourseCard, CourseList } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { getAllCourser } from '@content/course/fetcher';
 import { useWalletInfo } from '@components/web3/hooks';
-import { Button } from '@components/ui/common';
+import { Button, Loader } from '@components/ui/common';
 import { OrderModal } from '@components/ui/order';
 import { useState } from 'react';
 import { WalletHeader } from '@components/ui/marketplace';
 import { useWeb3 } from '@components/provider';
+import { useOwnedCourses } from '@components/web3/hooks';
+import { STATE_COLORS } from '@helpers/stateColor';
 
 export default function Marketplace({ courses }) {
 	const { web3, contract } = useWeb3();
-	const { account, canPurchaseCourse } = useWalletInfo();
+	const { account, hasConnectedWallet, isConnecting, network } =
+		useWalletInfo();
 	const [seletedCourse, setSelectedCourse] = useState(null);
+	const { ownedCourses } = useOwnedCourses(courses, account.data, network.data);
 
 	const _onPurchase = async (order) => {
 		const hexCourseId = web3.utils.utf8ToHex(seletedCourse.id);
@@ -54,18 +58,48 @@ export default function Marketplace({ courses }) {
 					<CourseCard
 						key={course.id}
 						course={course}
-						disabled={!canPurchaseCourse}
-						Footer={() => (
-							<div className="mt-4">
-								<Button
-									disabled={!canPurchaseCourse}
-									onClick={() => setSelectedCourse(course)}
-									variant="lightBlue"
-								>
-									Purchase
-								</Button>
-							</div>
-						)}
+						disabled={!hasConnectedWallet}
+						Footer={() => {
+							if (isConnecting) {
+								return (
+									<div className="mt-4">
+										<Button disabled={!hasConnectedWallet} variant="lightBlue">
+											<Loader size="sm" />
+										</Button>
+									</div>
+								);
+							}
+
+							const owned = ownedCourses.lookup[course.id];
+							const stateColor = STATE_COLORS[owned?.state];
+
+							if (owned) {
+								return (
+									<div className="mt-4 flex items-center">
+										<Button disabled={true} variant="green">
+											Owned
+										</Button>
+										<span
+											className={`text-xs text-${stateColor}-800 bg-${stateColor}-200 rounded p-1 ml-2`}
+										>
+											{owned?.state}
+										</span>
+									</div>
+								);
+							}
+
+							return (
+								<div className="mt-4">
+									<Button
+										disabled={!hasConnectedWallet}
+										onClick={() => setSelectedCourse(course)}
+										variant="lightBlue"
+									>
+										Purchase
+									</Button>
+								</div>
+							);
+						}}
 					/>
 				)}
 			</CourseList>

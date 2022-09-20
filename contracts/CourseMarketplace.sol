@@ -6,9 +6,7 @@ contract Marketplace {
     enum State {
         Purchased,
         Activated,
-        Deactivated,
-        Pending,
-        Strike
+        Deactivated
     }
 
     //structure for each course
@@ -136,7 +134,7 @@ contract Marketplace {
         (bool success, ) = course.owner.call{value: course.price}("");
         require(success, "Transfer failed!");
 
-        course.state = State.Pending;
+        course.state = State.Deactivated;
         course.price = 0;
     }
 
