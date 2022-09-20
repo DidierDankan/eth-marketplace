@@ -1,7 +1,8 @@
 import { Button } from '@components/ui/common';
 import { useState } from 'react';
+import OPTIONS from '@helpers/filterOptions';
 
-const OPTIONS = ['all', 'purchased', 'activated', 'deactivated'];
+// const OPTIONS = ['all', 'purchased', 'activated', 'deactivated'];
 
 export default function CourseFilter({ onSearchSubmit, onFilterSelecte }) {
 	const [searchText, setSearchText] = useState('');

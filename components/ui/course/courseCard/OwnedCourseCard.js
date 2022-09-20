@@ -1,10 +1,7 @@
 import Image from 'next/image';
-import { STATE_COLORS } from '@helpers/stateColor';
 import { Tag } from '@components/ui/common';
 
 export default function OwnedCourseCard({ children, course }) {
-	const stateColor = STATE_COLORS[course?.state];
-
 	return (
 		<div className="bg-white border shadow overflow-hidden sm:rounded-lg mb-3">
 			<div className="block sm:flex">

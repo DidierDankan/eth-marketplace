@@ -13,9 +13,11 @@ export default function ManagedCourseCard({
 	children,
 	course,
 	isSearched = false,
+	key,
 }) {
 	return (
 		<div
+			key={key}
 			className={`${
 				isSearched ? 'border-indigo-600' : 'bg-gray-200'
 			} bg-white border shadow overflow-hidden sm:rounded-lg mb-3`}
