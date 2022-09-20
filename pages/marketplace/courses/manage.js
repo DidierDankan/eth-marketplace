@@ -6,8 +6,11 @@ import { useAdmin, useManageCourses } from '@components/web3/hooks';
 import { useState } from 'react';
 import { useWeb3 } from '@components/provider';
 import { VerificationInput } from '@components/ui/marketplace';
+import { normalizeOwnedCourse } from '@utils/normalize';
 
 export default function ManageCourses() {
+	const [searchCourse, setSearchCourse] = useState(null);
+	const [filter, setFilter] = useState({ state: 'all' });
 	const [proofedOwnership, setProofedOwnership] = useState({});
 	const { web3, contract } = useWeb3();
 
@@ -50,53 +53,97 @@ export default function ManageCourses() {
 		changeCourseState(courseHash, 'deactivateCourse');
 	};
 
+	const _searchCourse = async (hash) => {
+		const re = /[0-9A-Fa-f]{6}/g;
+
+		if (hash && hash.length === 66 && re.test(hash)) {
+			const course = await contract.methods.getCourseByHash(hash).call();
+
+			if (course.owner !== '0x0000000000000000000000000000000000000000') {
+				const normalize = normalizeOwnedCourse(web3)({ hash }, course);
+				setSearchCourse(normalize);
+				return;
+			}
+		}
+
+		setSearchCourse(null);
+	};
+
+	const renderCard = (course, isSearched) => {
+		return (
+			<ManagedCourseCard
+				key={course.ownedCourseId}
+				isSearched={isSearched}
+				course={course}
+			>
+				<VerificationInput
+					onVerify={(email) => {
+						verifyCourse(email, {
+							hash: course.hash,
+							proof: course.proof,
+						});
+					}}
+				/>
+				{proofedOwnership[course.hash] && (
+					<div className="mt-2">
+						<Message>Verified!</Message>
+					</div>
+				)}
+				{proofedOwnership[course.hash] === false && (
+					<div className="mt-2">
+						<Message type="danger">Wrong Proof!</Message>
+					</div>
+				)}
+				{course.state === 'purchased' && (
+					<div className="mt-2">
+						<Button
+							onClick={() => _activateCourse(course.hash)}
+							variant="green"
+						>
+							Activate
+						</Button>
+						<Button
+							onClick={() => _deactivateCourse(course.hash)}
+							variant="red"
+						>
+							Deactivate
+						</Button>
+					</div>
+				)}
+			</ManagedCourseCard>
+		);
+	};
+
+	const filteredCourses = manageCourses.data
+		?.filter((course) => {
+			if (filter.state === 'all') {
+				return true;
+			}
+			return course.state === filter.state;
+		})
+		.map((course) => renderCard(course));
+
+	if (!account.isAdmin) {
+		return null;
+	}
+
 	return (
 		<>
 			<WalletHeader />
-			<CourseFilter />
+			<CourseFilter
+				onSearchSubmit={_searchCourse}
+				onFilterSelecte={(value) => setFilter({ state: value })}
+			/>
 			<section className="grid grid-cols-1">
-				{manageCourses.data?.map((course) => (
-					<ManagedCourseCard key={course.courseOwnedId} course={course}>
-						<div className="flex mr-2 relative rounded-md">
-							<VerificationInput
-								onVerify={(email) => {
-									verifyCourse(email, {
-										hash: course.hash,
-										proof: course.proof,
-									});
-								}}
-							/>
-						</div>
-						{proofedOwnership[course.hash] && (
-							<div className="mt-2">
-								<Message>Verified!</Message>
-							</div>
-						)}
-						{proofedOwnership[course.hash] == false && (
-							<div className="mt-2">
-								<Message type="danger">Wrong Proof!</Message>
-							</div>
-						)}
-						{course.state === 'pending' && (
-							<div>
-								<Button
-									onClick={() => _activateCourse(course.hash)}
-									className="mt-2 mr-2"
-									variant="green"
-								>
-									Activate
-								</Button>
-								<Button
-									onClick={() => _deactivateCourse(course.hash)}
-									className="mt-2"
-									variant="red"
-								>
-									Deactivate
-								</Button>
-							</div>
-						)}
-					</ManagedCourseCard>
-				))}
+				<div>
+					<h1 className="text-2xl font-bold p-5">Search</h1>
+					{searchCourse && renderCard(searchCourse, true)}
+				</div>
+				<h1 className="text-2xl font-bold p-5">All Courses</h1>
+				{filteredCourses}
+				{filteredCourses?.length === 0 && (
+					<Message type="warning">No Courses to display</Message>
+				)}
 			</section>
 		</>
 	);

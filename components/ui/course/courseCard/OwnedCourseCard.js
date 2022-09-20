@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { STATE_COLORS } from '@helpers/stateColor';
+import { Tag } from '@components/ui/common';
 
 export default function OwnedCourseCard({ children, course }) {
 	const stateColor = STATE_COLORS[course?.state];
@@ -23,11 +24,7 @@ export default function OwnedCourseCard({ children, course }) {
 					<div className="px-4 py-5 sm:px-6">
 						<h3 className="text-lg leading-6 font-medium text-gray-900">
 							<span>{course.title}</span>
-							<span
-								className={`text-xs text-${stateColor}-800 bg-${stateColor}-200 rounded p-1 ml-2`}
-							>
-								{course.state}
-							</span>
+							<Tag variant={course.state}>{course.state}</Tag>
 						</h3>
 						<p className="mt-1 max-w-2xl text-sm text-gray-500">
 							{course.price} ETH

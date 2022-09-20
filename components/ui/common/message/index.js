@@ -1,11 +1,5 @@
 import { useState } from 'react';
 
-const TYPES = {
-	success: 'green',
-	warning: 'yellow',
-	danger: 'red',
-};
-
 export default function Message({ children, type = 'success' }) {
 	const [isDisplayed, setIsDisplayed] = useState(true);
 
@@ -13,14 +7,18 @@ export default function Message({ children, type = 'success' }) {
 		return null;
 	}
 
-	const messageType = TYPES[type];
+	const VARIANTS = {
+		success: { bg: 'bg-green-100', text: 'text-green-800' },
+		warning: { bg: 'bg-orange-100', text: 'text-orange-800' },
+		danger: { bg: 'bg-red-100', text: 'text-red-800' },
+	};
 
 	return (
-		<div className={`bg-${messageType}-100 rounded-xl mb-3`}>
+		<div className={`${VARIANTS[type]?.bg} rounded-xl mb-3`}>
 			<div className="max-w-7xl mx-auto py-3 px-3 sm:px-3 lg:px-3">
 				<div className="flex items-center justify-between flex-wrap">
 					<div className="w-0 flex-1 flex items-center">
-						<p className={`ml-3 font-medium text-${messageType}-800`}>
+						<p className={`ml-3 font-medium ${VARIANTS[type]?.text}`}>
 							{children}
 						</p>
 					</div>
@@ -32,7 +30,7 @@ export default function Message({ children, type = 'success' }) {
 						>
 							<span className="sr-only">Dismiss</span>
 							<svg
-								className={`h-6 w-6 text-${messageType}-900`}
+								className={`h-6 w-6 ${VARIANTS[type]?.text}`}
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
