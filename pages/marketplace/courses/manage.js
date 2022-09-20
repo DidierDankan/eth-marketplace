@@ -32,24 +32,22 @@ export default function ManageCourses() {
 			  });
 	};
 
-	const _activateCourse = async (courseHash) => {
+	const changeCourseState = async (courseHash, method) => {
 		try {
-			await contract.methods
-				.activateCourse(courseHash)
-				.send({ from: account.data });
+			await contract.methods[method](courseHash).send({
+				from: account.data,
+			});
 		} catch (error) {
 			console.error(error.message);
 		}
 	};
 
+	const _activateCourse = async (courseHash) => {
+		changeCourseState(courseHash, 'activateCourse');
+	};
+
 	const _deactivateCourse = async (courseHash) => {
-		try {
-			await contract.methods
-				.deactivateCourse(courseHash)
-				.send({ from: account.data });
-		} catch (error) {
-			console.error(error.message);
-		}
+		changeCourseState(courseHash, 'deactivateCourse');
 	};
 
 	return (

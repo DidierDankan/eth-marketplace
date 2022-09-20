@@ -10,7 +10,7 @@ const Item = ({ title, value, className }) => {
 };
 
 export default function ManagedCourseCard({ children, course }) {
-	console.log('COURSE', course);
+	console.log(course);
 	return (
 		<div className="bg-white border shadow overflow-hidden sm:rounded-lg mb-3">
 			<div className="border-t border-gray-200">

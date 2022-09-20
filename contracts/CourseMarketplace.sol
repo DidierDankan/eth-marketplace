@@ -118,7 +118,7 @@ contract Marketplace {
         course.state = State.Activated;
     }
 
-    // deactivate the course after owner activate it
+    // deactivate the course
     function deactivateCourse(bytes32 courseHash) external onlyOwner {
         if (!isCourseCreated(courseHash)) {
             revert CourseIsNotCreated();
@@ -130,7 +130,7 @@ contract Marketplace {
             revert InvalidState();
         }
 
-        // return any value to the buyer of the course
+        // return course payed value to the buyer of the course
         (bool success, ) = course.owner.call{value: course.price}("");
         require(success, "Transfer failed!");
 

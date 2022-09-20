@@ -16,7 +16,7 @@ export default function Marketplace({ courses }) {
 	const _onPurchase = async (order) => {
 		const hexCourseId = web3.utils.utf8ToHex(seletedCourse.id);
 
-		//emailHash + courseHash
+		//courseIdHex + account address
 		const orderHash = web3.utils.soliditySha3(
 			{
 				type: 'bytes16',
@@ -26,7 +26,7 @@ export default function Marketplace({ courses }) {
 		);
 
 		const emailHash = web3.utils.sha3(order.email);
-
+		//emailHash + orderHash
 		const proof = web3.utils.soliditySha3(
 			{
 				type: 'bytes32',
