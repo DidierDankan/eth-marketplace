@@ -7,3 +7,4 @@ export { default as Button } from './button';
 export { default as ActiveLink } from './activeLink';
 export { default as Message } from './message';
 export { default as Loader } from './loader';
+export { default as Tag } from './tag';

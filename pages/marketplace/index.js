@@ -109,8 +109,8 @@ export default function Marketplace({ courses }) {
 													Fund to Activate
 												</Button>
 											) : (
-												<Button size="sm" disabled={true} variant="green">
-													Owned
+												<Button size="sm" disabled={true} variant="white">
+													Owner
 												</Button>
 											)}
 										</div>

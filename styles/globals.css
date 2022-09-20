@@ -148,3 +148,14 @@
   40% { opacity: 1; }
 }
 
+
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
