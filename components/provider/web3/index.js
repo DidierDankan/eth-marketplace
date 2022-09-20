@@ -17,6 +17,10 @@ const createWeb3State = ({ provider, web3, contract, isProviderLoaded }) => {
 	};
 };
 
+const setListener = (provider) => {
+	provider.on('chainChanged', (_) => window.location.reload());
+};
+
 export default function Web3Provider({ children }) {
 	const [web3Api, setWeb3Api] = useState(
 		createWeb3State({
@@ -34,6 +38,8 @@ export default function Web3Provider({ children }) {
 			if (provider) {
 				const web3 = new Web3(provider);
 				const contract = await loadContract('Marketplace', web3);
+				//make the window reload wenever changing network on metamask
+				setListener(provider);
 				setWeb3Api(
 					createWeb3State({
 						web3,

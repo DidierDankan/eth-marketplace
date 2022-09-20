@@ -10,12 +10,10 @@ export default function Course({ course }) {
 	const courseState = ownedCourse.data?.state;
 
 	const isLocked =
-		!courseState ||
-		courseState === 'purchased' ||
-		courseState === 'deactivated';
+		!courseState || courseState === 'pending' || courseState === 'deactivated';
 
 	const showCourseState = () => {
-		if (courseState === 'purchased') {
+		if (courseState === 'pending') {
 			return (
 				<Message type="warning">
 					Course is purchased and waiting for activation. Process can take up to

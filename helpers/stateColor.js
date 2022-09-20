@@ -1,5 +1,5 @@
 export const STATE_COLORS = {
-	purchased: 'orange',
+	pending: 'yellow',
 	activated: 'green',
 	deactivated: 'red',
 };

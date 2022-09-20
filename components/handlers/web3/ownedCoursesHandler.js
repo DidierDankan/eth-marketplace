@@ -2,14 +2,11 @@ import { normalizeOwnedCourse } from '@utils/normalize';
 import { createCourseHash } from '@utils/hash';
 import useSwr from 'swr';
 
-export const handler = (web3, contract) => (courses, account, network) => {
+export const handler = (web3, contract) => (courses, account) => {
 	const swrRes = useSwr(
 		//when the unic identifier changes, the function will re-fetch, so we use the account number to make it unic
 		//we do this becouse when we change account on metamask the owned courses will be updated straigth away
-		() =>
-			web3 && contract && account && network
-				? `web3/ownedCourses/${account}/${network}`
-				: null,
+		() => (web3 && contract && account ? `web3/ownedCourses/${account}` : null),
 		async () => {
 			const ownedCourses = [];
 			for (let i = 0; i < courses.length; i++) {

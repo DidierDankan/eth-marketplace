@@ -66,7 +66,7 @@ const Lecture = ({ lock, courseState, isLoading }) => {
 																</a>
 															</Link>
 														)}
-														{courseState && courseState === 'purchased' && (
+														{courseState && courseState === 'pending' && (
 															<Link href="/faq" passHref>
 																<a className="text-yellow-600 hover:text-yellow-900">
 																	Waiting for Activation...

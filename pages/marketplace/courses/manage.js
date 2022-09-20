@@ -77,7 +77,7 @@ export default function ManageCourses() {
 								<Message type="danger">Wrong Proof!</Message>
 							</div>
 						)}
-						{course.state === 'purchased' && (
+						{course.state === 'pending' && (
 							<div>
 								<Button
 									onClick={() => _activateCourse(course.hash)}
