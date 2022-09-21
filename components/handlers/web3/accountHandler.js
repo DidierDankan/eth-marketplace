@@ -6,7 +6,7 @@ import useSwr from 'swr';
 
 const adminAddresses = {
 	//hashed version of portfolio account "fb765b61dfac8bc33fa98ac16686b993e6d84798d6f6c28a6923e276e7e3f345"
-	'0x9A7643C8Ae7729733C86A15BF74AbFca0eca389f': true,
+	'0xD1d7d20147AD9cb7F60Fc85a3e3a3c8B28728699': true,
 };
 
 export const handler = (web3, provider) => () => {

@@ -6,6 +6,7 @@ import { Button } from '@components/ui/common';
 const Walletbar = () => {
 	const { isWeb3Loaded } = useWeb3();
 	const { account, network } = useWalletInfo();
+	console.log('NETWORK', network);
 
 	const adminColorAddress = () => {
 		if (account.isAdmin) {

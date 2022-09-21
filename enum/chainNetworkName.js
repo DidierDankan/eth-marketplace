@@ -13,6 +13,10 @@ const EnumNetworks = {
 		image: imgRky,
 		name: 'Rinkeby test network',
 	},
+	3: {
+		image: imgRky,
+		name: 'Ropsten test network',
+	},
 	137: {
 		image: imgPol,
 		name: 'Polygon',

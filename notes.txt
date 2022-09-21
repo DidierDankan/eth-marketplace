@@ -46,4 +46,9 @@ create migration file of contract
 
 with ganache => add truffle.config file to ganache on settings
 
-truffle migrate to deploy contracts
+TO DEPLOY contracts
+we need to add configurations to our truffle config file, then:
+truffle migrate --network <networkName> 
+
+
+https://infura.io/dashboard/ethereum/146a5b7b99f94cea98031ffdc5b7d857/settings
