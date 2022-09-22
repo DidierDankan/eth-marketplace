@@ -11,7 +11,6 @@ export const handler = (web3) => () => {
 		async () => {
 			//get current chainId
 			const chainId = await web3.eth.getChainId();
-			console.log('CHAIN ID', chainId);
 
 			if (!chainId) {
 				throw new Error('Cannot retrieve network, please refresh the browser');

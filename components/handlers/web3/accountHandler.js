@@ -37,7 +37,7 @@ export const handler = (web3, provider) => () => {
 
 		//clean up function to un-subscribe when changing ACCOUNT
 		return () => {
-			window.ethereum.removeListener('accountsChanged', mutator);
+			window.ethereum?.removeListener('accountsChanged', mutator);
 		};
 	}, [mutate]);
 

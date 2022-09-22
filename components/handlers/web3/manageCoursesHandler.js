@@ -37,7 +37,7 @@ export const handler = (web3, contract) => (account) => {
 			}
 
 			//return owned courses
-			return courses;
+			return courses.reverse();
 		}
 	);
 

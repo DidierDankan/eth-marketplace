@@ -1,3 +1,3 @@
-const OPTIONS = ['all', 'purchased', 'activated', 'deactivated'];
+const OPTIONS = ['all', 'pending', 'activated', 'deactivated'];
 
 export default OPTIONS;

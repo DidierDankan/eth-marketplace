@@ -1,12 +1,13 @@
 import { CourseFilter, ManagedCourseCard } from '@components/ui/course';
 import { BaseLayout } from '@components/ui/layout';
 import { WalletHeader } from '@components/ui/marketplace';
-import { Message, Button } from '@components/ui/common';
+import { Message, Button, Loader } from '@components/ui/common';
 import { useAdmin, useManageCourses } from '@components/web3/hooks';
 import { useState } from 'react';
 import { useWeb3 } from '@components/provider';
 import { VerificationInput } from '@components/ui/marketplace';
 import { normalizeOwnedCourse } from '@utils/normalize';
+import { notify } from '@utils/notify';
 
 export default function ManageCourses() {
 	const [searchCourse, setSearchCourse] = useState(null);
@@ -38,22 +39,59 @@ export default function ManageCourses() {
 			  });
 	};
 
-	const changeCourseState = async (courseHash, method) => {
+	const changeCourseState = async (
+		courseHash,
+		method,
+		state,
+		course,
+		price
+	) => {
 		try {
-			await contract.methods[method](courseHash).send({
+			const result = await contract.methods[method](courseHash).send({
 				from: account.data,
 			});
+			// find the index of course and use it to update state of said course
+			const index = manageCourses.data.findIndex((c) => {
+				return c.courseOwnedId === course.courseOwnedId;
+			});
+
+			if (index >= 0) {
+				manageCourses.data[index].state = state;
+				manageCourses.data[index].price = price;
+
+				manageCourses.mutate(manageCourses.data);
+			} else {
+				manageCourses.mutate();
+			}
+
+			return result;
 		} catch (error) {
-			console.error(error.message);
+			throw new Error(error.message);
 		}
 	};
 
-	const _activateCourse = async (courseHash) => {
-		changeCourseState(courseHash, 'activateCourse');
+	const _activateCourse = async (courseHash, course) => {
+		notify(
+			changeCourseState(
+				courseHash,
+				'activateCourse',
+				'activated',
+				course,
+				course.price
+			)
+		);
 	};
 
-	const _deactivateCourse = async (courseHash) => {
-		changeCourseState(courseHash, 'deactivateCourse');
+	const _deactivateCourse = async (courseHash, course) => {
+		notify(
+			changeCourseState(
+				courseHash,
+				'deactivateCourse',
+				'deactivated',
+				course,
+				'0'
+			)
+		);
 	};
 
 	const _searchCourse = async (hash) => {
@@ -97,16 +135,16 @@ export default function ManageCourses() {
 						<Message type="danger">Wrong Proof!</Message>
 					</div>
 				)}
-				{course.state === 'purchased' && (
+				{course.state === 'pending' && (
 					<div className="mt-2">
 						<Button
-							onClick={() => _activateCourse(course.hash)}
+							onClick={() => _activateCourse(course.hash, course)}
 							variant="green"
 						>
 							Activate
 						</Button>
 						<Button
-							onClick={() => _deactivateCourse(course.hash)}
+							onClick={() => _deactivateCourse(course.hash, course)}
 							variant="red"
 						>
 							Deactivate
@@ -143,7 +181,7 @@ export default function ManageCourses() {
 					{searchCourse && renderCard(searchCourse, true)}
 				</div>
 				<h1 className="text-2xl font-bold p-5">All Courses</h1>
-				{filteredCourses}
+				{!filteredCourses ? <Loader /> : filteredCourses}
 				{filteredCourses?.length === 0 && (
 					<Message type="warning">No Courses to display</Message>
 				)}
