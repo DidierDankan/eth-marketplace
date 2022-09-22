@@ -36,11 +36,3 @@ module.exports = {
 		},
 	},
 };
-
-// transaction hash: 0x679161de776e35d9214d34b6f575dd26fdfd2a165e4ec6f4346d54250ab7ae6f
-// contract address:    0xba4bb0152E004149390F4712Ab55Eaf179bCE933
-// account:             0x45b5F53aD37503ffd60188D00428c91E0dCb9544
-
-// GANACHE ENV
-// NEXT_PUBLIC_TARGET_CHAIN_ID=1337
-// NEXT_PUBLIC_NETWORK_ID=5777
