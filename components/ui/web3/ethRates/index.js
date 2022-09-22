@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import ethImg from 'img/chain/eth.png';
-import { useEthPrice, COURSE_PRICE } from '@components/web3/useEthPrice';
+import { useEthPrice } from '@components/web3/useEthPrice';
 import { Loader } from '@components/ui/common';
 
 export default function EthRates() {
