@@ -41,7 +41,7 @@ export default function EthRates() {
 								src={ethImg}
 								alt="ether image"
 							/>
-							<span className="ml-2 text-xl font-bold">= {COURSE_PRICE}$</span>
+							<span className="ml-2 text-xl font-bold">= {eth.itemPrice}$</span>
 						</>
 					) : (
 						<div className="w-full flex justify-center">
